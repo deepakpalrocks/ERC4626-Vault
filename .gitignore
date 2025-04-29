@@ -1,6 +1,31 @@
-# Compiler files
-cache/
+# Dependencies
+node_modules/
+lib/
+
+# Build output
 out/
+cache/
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Foundry
+forge-std/
+ds-test/
+
+# Misc
+.DS_Store
+*.log
+coverage/
+coverage.json
 
 # Ignores development broadcast logs
 !/broadcast
@@ -9,6 +34,3 @@ out/
 
 # Docs
 docs/
-
-# Dotenv file
-.env
