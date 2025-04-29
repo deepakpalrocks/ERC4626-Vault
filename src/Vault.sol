@@ -5,12 +5,18 @@ import { ERC4626 } from "@openzeppelin/contracts/token/ERC20/extensions/ERC4626.
 import { IERC20 } from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import { IStreamRewarder } from "./interfaces/IStreamRewarder.sol";
 import {SafeERC20} from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
+import { ERC20 } from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 
 contract Vault is ERC4626 {
 
     address public immutable rewarder;
 
-    constructor(address _token, address _rewarder) ERC4626(IERC20(_token)) {
+    constructor(
+        IERC20 _token, 
+        string memory vaultName, 
+        string memory vaultSymbol, 
+        address _rewarder
+    ) ERC4626(_token) ERC20(vaultName, vaultSymbol) {
         rewarder = _rewarder;
     }
 

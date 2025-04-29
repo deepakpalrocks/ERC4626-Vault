@@ -66,11 +66,9 @@ contract StreamRewarder is Initializable, ReentrancyGuardUpgradeable, OwnableUpg
         _disableInitializers();
     }
 
-    function initialize(address _rewardQueuer, address _receiptToken, uint256 _duration) public initializer {
+    function initialize(address _rewardQueuer, uint256 _duration) public initializer {
         __Ownable_init(msg.sender);
-        receiptToken = _receiptToken;
         isRewardQueuer[_rewardQueuer] = true;
-        receipTokenDecimal = IERC20Metadata(receiptToken).decimals();
         duration = _duration;
     }
 
@@ -197,26 +195,24 @@ contract StreamRewarder is Initializable, ReentrancyGuardUpgradeable, OwnableUpg
 
     function getRewards(
         address _account,
-        address _receiver,
         address[] memory _rewardTokens
     ) public nonReentrant {
         _updateFor(_account);
 
         for (uint256 index = 0; index <  _rewardTokens.length; ++index) {
             address rewardToken = _rewardTokens[index];
-            _sendReward(_account, _receiver, rewardToken);
+            _sendReward(_account, _account, rewardToken);
         }
     }
 
     function getReward(
-        address _account,
-        address _receiver
+        address _account
     ) external nonReentrant returns(bool) {
         _updateFor(_account);
 
         for (uint256 index = 0; index <  rewardTokens.length; ++index) {
             address rewardToken = rewardTokens[index];
-            _sendReward(_account, _receiver, rewardToken);
+            _sendReward(_account, _account, rewardToken);
         }
         return true;
     }
@@ -328,5 +324,10 @@ contract StreamRewarder is Initializable, ReentrancyGuardUpgradeable, OwnableUpg
         isRewardQueuer[_rewardManager] = _allowed;
 
         emit RewardQueuerUpdated(_rewardManager, isRewardQueuer[_rewardManager]);
+    }
+
+    function setReceiptToken(address _receiptToken) external onlyOwner {
+        receiptToken = _receiptToken;
+        receipTokenDecimal = IERC20Metadata(receiptToken).decimals();
     }
 }
